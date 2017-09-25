@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+    spark-master:
+        image: snps/spark
+        ports: 
+            - "8080:8080"
+            - "7077:7077"
+        networks:
+            - spark-cluster
+        command: ["./keep_running.sh", "./spark-2.2.0-bin-hadoop2.7/sbin/start-master.sh"]
+    spark-slave:
+        image: snps/spark
+        ports:
+            - "7077"
+        networks:
+            - spark-cluster
+        links:
+            - spark-master
+        depends_on:
+            - spark-master
+        command: ["./keep_running.sh", "./spark-2.2.0-bin-hadoop2.7/sbin/start-slave.sh", "spark://spark-master:7077"]
+networks:
+    spark-cluster:
