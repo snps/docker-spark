@@ -16,8 +16,8 @@ WORKDIR /home/$USER
 RUN curl -k -L -O https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz \
 	&& tar -xvf spark-2.2.0-bin-hadoop2.7.tgz && rm spark-2.2.0-bin-hadoop2.7.tgz
 
-COPY start-nodaemon.sh ./spark-2.2.0-bin-hadoop2.7/sbin
+COPY keep_running.sh ./
 
-RUN chmod 744 ./spark-2.2.0-bin-hadoop2.7/sbin/start-nodaemon.sh
+RUN chmod 744 keep_running.sh
 
 CMD ./spark-2.2.0-bin-hadoop2.7/bin/spark-shell --master local
