@@ -1,4 +1,4 @@
-FROM snps/sbt
+FROM openjdk:8-alpine
 
 LABEL com.apple.author="Felix Glas"
 
