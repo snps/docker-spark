@@ -3,6 +3,8 @@ version: "3"
 services:
     spark-master:
         image: snps/spark
+        environment:
+            - SPARK_WORKER_PORT=7001
         ports: 
             - "8080:8080"
             - "7077:7077"
@@ -11,8 +13,10 @@ services:
         command: ["./keep_running.sh", "./spark-2.2.0-bin-hadoop2.7/sbin/start-master.sh"]
     spark-slave:
         image: snps/spark
-        ports:
-            - "7077"
+        environment:
+            - SPARK_WORKER_PORT=7001
+        expose:
+            - "7001-7020"
         networks:
             - spark-cluster
         links:
