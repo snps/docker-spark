@@ -16,7 +16,7 @@ services:
         environment:
             - SPARK_WORKER_PORT=7001
         expose:
-            - "7001-7020"
+            - "7001"
         networks:
             - spark-cluster
         links:
