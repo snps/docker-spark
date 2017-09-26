@@ -4,25 +4,37 @@ services:
     spark-master:
         image: snps/spark
         environment:
-            - SPARK_WORKER_PORT=7001
+            - SPARK_WORKER_PORT=8881
+        expose:
+            - "7001-7006"
         ports: 
             - "8080:8080"
             - "7077:7077"
+            - "6066:6066"
+            - "4040:4040"
         networks:
             - spark-cluster
-        command: ["./keep_running.sh", "./spark-2.2.0-bin-hadoop2.7/sbin/start-master.sh"]
+        volumes:
+            - spark-jars:/jars
+        command: ["./spark-2.2.0-bin-hadoop2.7/bin/spark-class", "org.apache.spark.deploy.master.Master"]
     spark-slave:
         image: snps/spark
         environment:
-            - SPARK_WORKER_PORT=7001
+            - SPARK_WORKER_PORT=8881
         expose:
-            - "7001"
+            - "8881"
+            - "7012-7016"
         networks:
             - spark-cluster
         links:
             - spark-master
         depends_on:
             - spark-master
-        command: ["./keep_running.sh", "./spark-2.2.0-bin-hadoop2.7/sbin/start-slave.sh", "spark://spark-master:7077"]
+        volumes:
+            - spark-jars:/jars
+        command: ["./spark-2.2.0-bin-hadoop2.7/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
 networks:
     spark-cluster:
+volumes:
+    spark-jars:
+        external: true
